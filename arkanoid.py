@@ -1,6 +1,7 @@
 from game.utils.constans import *
 from game.utils.utility import *
 from game.event import eventManager
+from game.game import Game
 
 
 class ArkanoidGame(object):
@@ -8,6 +9,7 @@ class ArkanoidGame(object):
         pygame.init()
         self._clock = pygame.time.Clock()
         self._screen = self._create_screen()
+        self._game = Game()
         self._running = True
 
         def __quit_listener(_):
@@ -23,8 +25,8 @@ class ArkanoidGame(object):
 
     def main_loop(self):
         while self._running:
-            self._screen.fill(GAME_BACKGROUND)
             eventManager.notify()
+            self._game.run()
             pygame.display.flip()
             self._clock.tick(FPS)
 
