@@ -9,10 +9,7 @@ class Paddle(pygame.sprite.Sprite):
         self._image, self._rect = load_img(PADDLE_IMG)
         self._rect.x, self._rect.y = x, y
 
-        screen = pygame.display.get_surface()
-        self._area = screen.get_rect()
-
-        self.speed = 8
+        self._area = pygame.display.get_surface().get_rect()
         self.move_pos = [0, 0]
 
     def update(self):
@@ -22,10 +19,10 @@ class Paddle(pygame.sprite.Sprite):
         pygame.event.pump()
 
     def move_left(self):
-        self.move_pos[0] = self.move_pos[0] - self.speed
+        self.move_pos[0] = self.move_pos[0] - PADDLE_SPEED
 
     def move_right(self):
-        self.move_pos[0] = self.move_pos[0] + self.speed
+        self.move_pos[0] = self.move_pos[0] + PADDLE_SPEED
 
     @property
     def rect(self):

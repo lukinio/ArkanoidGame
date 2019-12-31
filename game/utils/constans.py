@@ -16,7 +16,8 @@ GAME_BACKGROUND = (0, 128, 128)
 
 # Game Speed
 FPS = 60.0
-BALL_SPEED = 4
+BALL_SPEED = 8
+PADDLE_SPEED = 8
 
 # Graphics
 SRC = "game/graphics/"
