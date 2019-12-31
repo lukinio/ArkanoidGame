@@ -1,5 +1,6 @@
 from game.utils.constans import *
 from game.spirites.paddle import Paddle
+from game.spirites.ball import Ball
 from game.event import *
 
 
@@ -8,9 +9,13 @@ class Game(object):
     def __init__(self):
         self._screen = pygame.display.get_surface()
         self._paddle = Paddle(250, 550)
+        self._ball = Ball(295, 540)
 
         self._all_spirits = pygame.sprite.Group()
         self._all_spirits.add(self._paddle)
+        self._all_spirits.add(self._ball)
+
+        self._ball.add_collide_sprites(self._paddle)
 
         self._create_move_listeners()
 
