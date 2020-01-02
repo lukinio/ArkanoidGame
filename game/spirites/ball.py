@@ -1,7 +1,7 @@
 import math
 import random
 
-from game.utils.constans import *
+from game.utils.constans import BALL_IMG, BALL_SPEED, PADDLE_SPEED
 from game.utils.utility import *
 
 
@@ -16,18 +16,28 @@ class Ball(pygame.sprite.Sprite):
 
         self._area = pygame.display.get_surface().get_rect()
         self._collide_sprites = pygame.sprite.Group()
+        self._paddle_sprites = pygame.sprite.GroupSingle()
         self.angle = 70
 
-    def add_collide_sprites(self, sprite):
-        self._collide_sprites.add(sprite)
+    def add_collide_sprites(self, sprite, paddle=False):
+        if paddle:
+            self._paddle_sprites.add(sprite)
+        else:
+            self._collide_sprites.add(sprite)
 
-    def remove_collide_sprites(self, sprite):
-        self._collide_sprites.add(sprite)
+    def remove_collide_sprites(self, sprite, paddle=False):
+        if paddle:
+            self._paddle_sprites.remove(sprite)
+        else:
+            self._collide_sprites.remove(sprite)
+
+    def remove_all_collide_sprites(self):
+        self._collide_sprites.empty()
 
     @staticmethod
     def calc_new_pos(rect, angle):
         angle_rad = math.radians(angle)
-        return rect.move(BALL_SPEED * math.cos(angle_rad), BALL_SPEED * -math.sin(angle_rad))
+        return rect.move(BALL_SPEED * math.cos(angle_rad), -BALL_SPEED * math.sin(angle_rad))
 
     def update(self):
         if self._moving:
@@ -39,9 +49,13 @@ class Ball(pygame.sprite.Sprite):
                 new_pos = self.calc_new_pos(self._rect, self.angle)
             self._rect = new_pos
 
-            if pygame.sprite.spritecollide(self, self._collide_sprites, False):
+            if pygame.sprite.spritecollide(self, self._paddle_sprites, False):
                 self.angle = random.randint(45, 135)
                 self.rect.y = 540
+
+            elif pygame.sprite.spritecollide(self, self._collide_sprites, True):
+                self.angle = random.randint(-135, -45)
+
         else:
             new_pos = self.rect.move(self.move_pos)
             if self._area.contains(new_pos):

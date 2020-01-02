@@ -1,6 +1,10 @@
 # Size of window
 WIDTH, HEIGHT = 600, 600
 
+# Bricks size
+BRICK_WIDTH = 43
+BRICK_HEIGHT = 21
+
 # Name
 DISPLAY_CAPTION = "Arkanoid"
 
