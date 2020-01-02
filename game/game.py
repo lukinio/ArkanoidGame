@@ -1,35 +1,28 @@
-from game.utils.constans import *
+import pygame
 from game.spirites.paddle import Paddle
 from game.spirites.ball import Ball
-from game.event import *
+from game.event import eventManager
 from game.levels.level1 import Level1
+from game.state import InitializeState
 
 
 class Game(object):
 
-    def __init__(self, level_class=Level1):
+    def __init__(self, level_class=Level1, life=3):
         self._screen = pygame.display.get_surface()
         self._paddle = Paddle(250, 550)
         self._ball = Ball(295, 540)
         self._level = level_class(100)
-        self._brick = self._level.create_level()
+        self._bricks = self._level.create_level()
+        self._life = life
 
         self._all_spirits = pygame.sprite.Group()
-        self._all_spirits.add(self._paddle)
-        self._all_spirits.add(self._ball)
-        self._all_spirits.add(self._brick)
-
-        self._ball.add_collide_sprites(self._paddle, True)
-        self._ball.add_collide_sprites(self._brick)
-
-        self._create_listeners()
+        self._state = InitializeState(self)
 
     def run(self):
-        self._screen.fill(GAME_BACKGROUND)
-        self._all_spirits.update()
-        self._all_spirits.draw(self._screen)
+        self._state.apply()
 
-    def _create_listeners(self):
+    def create_listeners(self):
 
         def ball_start(event):
             if event.key == pygame.K_SPACE:
@@ -54,3 +47,43 @@ class Game(object):
                 self._ball.move_pos = [0, 0]
 
         eventManager.subscribe(pygame.KEYUP, move_stop)
+
+    @property
+    def state(self):
+        return self._state
+
+    @state.setter
+    def state(self, state):
+        self._state = state
+
+    @property
+    def level(self):
+        return self._level
+
+    @property
+    def ball(self):
+        return self._ball
+
+    @property
+    def all_spirits(self):
+        return self._all_spirits
+
+    @property
+    def paddle(self):
+        return self._paddle
+
+    @property
+    def bricks(self):
+        return self._bricks
+
+    @property
+    def life(self):
+        return self._life
+
+    @life.setter
+    def life(self, life):
+        self._life = life
+
+    @property
+    def screen(self):
+        return self._screen
