@@ -29,6 +29,11 @@ FPS = 60.0
 BALL_SPEED = 8
 PADDLE_SPEED = 8
 
+# Game Position
+TOP_OFFSET = 100
+PADDLE_X, PADDLE_Y = WIDTH / 2, HEIGHT - 50
+BALL_X, BALL_Y = PADDLE_X + 45, PADDLE_Y - 10
+
 # Graphics
 SRC = "game/graphics/"
 PADDLE_IMG = SRC + "paddle.png"

@@ -21,17 +21,18 @@ class InitializeState(GameState):
         self._add_sprites()
         self._add_ball_collide_sprites()
         self.game.create_listeners()
+        self.game.back_to_start()
 
     def _add_sprites(self):
         self.game.all_spirits.empty()
         self.game.all_spirits.add(self.game.paddle)
         self.game.all_spirits.add(self.game.ball)
-        self.game.all_spirits.add(self.game.bricks)
+        self.game.all_spirits.add(self.game.level.bricks)
 
     def _add_ball_collide_sprites(self):
         self.game.ball.remove_all_collide_sprites()
         self.game.ball.add_collide_sprites(self.game.paddle, True)
-        self.game.ball.add_collide_sprites(self.game.bricks, on_collide=self.game.brick_collide)
+        self.game.ball.add_collide_sprites(self.game.level.bricks, on_collide=self.game.brick_collide)
 
     def apply(self):
         self.game.state = ScoreState(self.game)
@@ -60,12 +61,10 @@ class LoseLifeState(GameState):
     def __init__(self, game):
         super().__init__(game)
         self.game.life -= 1
-        self.game.ball.moving = False
+        self.game.back_to_start()
 
     def apply(self):
         if self.game.life > 0:
-            self.game.ball.rect.x = self.game.paddle.rect.x + 45
-            self.game.ball.rect.y = 540
             self.game.state = ScoreState(self.game)
         else:
             self.game.state = GameOverState(self.game)
@@ -77,7 +76,11 @@ class LoadNextLevelState(GameState):
         super().__init__(game)
 
     def apply(self):
-        pass
+        if self.game.level.next_level is not None:
+            self.game.level = self.game.level.next_level()
+            self.game.state = InitializeState(self.game)
+        else:
+            self.game.state = GameOverState(self.game)
 
 
 class GameOverState(GameState):
@@ -86,4 +89,4 @@ class GameOverState(GameState):
         super().__init__(game)
 
     def apply(self):
-        pass
+        draw_text(self.game.screen, str(self.game.score), WIDTH/2, HEIGHT/2, 50)

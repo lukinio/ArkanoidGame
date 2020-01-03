@@ -12,8 +12,8 @@ def load_img(path):
     return img, img.get_rect()
 
 
-def draw_text(surf, text, x, y):
-    font = pygame.font.Font(FONT_NAME, FONT_SIZE)
+def draw_text(surf, text, x, y, size=FONT_SIZE):
+    font = pygame.font.Font(FONT_NAME, size)
     text_surface = font.render(text, True, WHITE)
     text_rect = text_surface.get_rect()
     text_rect.midtop = (x, y)

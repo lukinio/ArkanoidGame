@@ -1,20 +1,19 @@
-import pygame
 from game.spirites.paddle import Paddle
 from game.spirites.ball import Ball
 from game.event import eventManager
 from game.levels.level1 import Level1
 from game.state import InitializeState
 from game.spirites.brick import BrickValue
+from game.utils.constans import *
 
 
 class Game(object):
 
     def __init__(self, level_class=Level1, life=3):
         self._screen = pygame.display.get_surface()
-        self._paddle = Paddle(250, 550)
-        self._ball = Ball(295, 540)
-        self._level = level_class(100)
-        self._bricks = self._level.create_level()
+        self._paddle = Paddle(PADDLE_X, PADDLE_Y)
+        self._ball = Ball(BALL_X, BALL_Y)
+        self._level = level_class()
         self._life = life
         self._score = 0
 
@@ -26,7 +25,13 @@ class Game(object):
 
     def brick_collide(self, brick):
         self._score += BrickValue[brick.color]
-        self._level.brick_destroyed()
+
+    def back_to_start(self):
+        self._paddle.rect.x = PADDLE_X
+        self._paddle.rect.y = PADDLE_Y
+        self._ball.rect.x = BALL_X
+        self._ball.rect.y = BALL_Y
+        self._ball.moving = False
 
     def create_listeners(self):
 
@@ -66,6 +71,10 @@ class Game(object):
     def level(self):
         return self._level
 
+    @level.setter
+    def level(self, level):
+        self._level = level
+
     @property
     def ball(self):
         return self._ball
@@ -77,10 +86,6 @@ class Game(object):
     @property
     def paddle(self):
         return self._paddle
-
-    @property
-    def bricks(self):
-        return self._bricks
 
     @property
     def life(self):
