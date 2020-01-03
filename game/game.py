@@ -4,6 +4,7 @@ from game.spirites.ball import Ball
 from game.event import eventManager
 from game.levels.level1 import Level1
 from game.state import InitializeState
+from game.spirites.brick import BrickValue
 
 
 class Game(object):
@@ -15,12 +16,17 @@ class Game(object):
         self._level = level_class(100)
         self._bricks = self._level.create_level()
         self._life = life
+        self._score = 0
 
         self._all_spirits = pygame.sprite.Group()
         self._state = InitializeState(self)
 
     def run(self):
         self._state.apply()
+
+    def brick_collide(self, brick):
+        self._score += BrickValue[brick.color]
+        self._level.brick_destroyed()
 
     def create_listeners(self):
 
@@ -87,3 +93,7 @@ class Game(object):
     @property
     def screen(self):
         return self._screen
+
+    @property
+    def score(self):
+        return self._score

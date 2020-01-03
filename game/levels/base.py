@@ -12,7 +12,7 @@ class BaseLevel(object):
 
     @property
     def complete(self):
-        return self._bricks_destroyed >= len(list(self.bricks))
+        return self._bricks_destroyed == len(self.bricks)
 
     def brick_destroyed(self):
         self._bricks_destroyed += 1

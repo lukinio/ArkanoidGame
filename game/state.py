@@ -1,5 +1,6 @@
 from abc import abstractmethod
 from game.utils.constans import *
+from game.utils.utility import draw_text
 
 
 class GameState(object):
@@ -30,7 +31,7 @@ class InitializeState(GameState):
     def _add_ball_collide_sprites(self):
         self.game.ball.remove_all_collide_sprites()
         self.game.ball.add_collide_sprites(self.game.paddle, True)
-        self.game.ball.add_collide_sprites(self.game.bricks)
+        self.game.ball.add_collide_sprites(self.game.bricks, on_collide=self.game.brick_collide)
 
     def apply(self):
         self.game.state = ScoreState(self.game)
@@ -45,6 +46,7 @@ class ScoreState(GameState):
         self.game.screen.fill(GAME_BACKGROUND)
         self.game.all_spirits.update()
         self.game.all_spirits.draw(self.game.screen)
+        draw_text(self.game.screen, str(self.game.score), WIDTH - 50, 20)
 
         if self.game.level.complete:
             self.game.state = LoadNextLevelState(self.game)

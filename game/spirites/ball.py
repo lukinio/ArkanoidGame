@@ -15,24 +15,26 @@ class Ball(pygame.sprite.Sprite):
         self.move_pos = [0, 0]
 
         self._area = pygame.display.get_surface().get_rect()
-        self._collide_sprites = pygame.sprite.Group()
+        self._bricks_sprites = pygame.sprite.Group()
         self._paddle_sprites = pygame.sprite.GroupSingle()
         self.angle = 70
+        self.brick_collide = None
 
-    def add_collide_sprites(self, sprite, paddle=False):
+    def add_collide_sprites(self, sprite, paddle=False, on_collide=None):
         if paddle:
             self._paddle_sprites.add(sprite)
         else:
-            self._collide_sprites.add(sprite)
+            self._bricks_sprites.add(sprite)
+            self.brick_collide = on_collide
 
     def remove_collide_sprites(self, sprite, paddle=False):
         if paddle:
             self._paddle_sprites.remove(sprite)
         else:
-            self._collide_sprites.remove(sprite)
+            self._bricks_sprites.remove(sprite)
 
     def remove_all_collide_sprites(self):
-        self._collide_sprites.empty()
+        self._bricks_sprites.empty()
 
     @staticmethod
     def calc_new_pos(rect, angle):
@@ -53,8 +55,11 @@ class Ball(pygame.sprite.Sprite):
                 self.angle = random.randint(45, 135)
                 self.rect.y = 540
 
-            elif pygame.sprite.spritecollide(self, self._collide_sprites, True):
+            collide_bricks = pygame.sprite.spritecollide(self, self._bricks_sprites, True)
+            if collide_bricks:
                 self.angle = random.randint(-135, -45)
+                for brick in collide_bricks:
+                    self.brick_collide(brick)
 
         else:
             new_pos = self.rect.move(self.move_pos)

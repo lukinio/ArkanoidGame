@@ -1,3 +1,5 @@
+import pygame
+
 # Size of window
 WIDTH, HEIGHT = 600, 600
 
@@ -14,6 +16,10 @@ WHITE = (255, 255, 255)
 RED = (255, 0, 0)
 GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
+
+# FONTS
+FONT_NAME = pygame.font.match_font('arial')
+FONT_SIZE = 18
 
 # Game colors
 GAME_BACKGROUND = (0, 128, 128)
