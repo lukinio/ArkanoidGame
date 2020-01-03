@@ -1,21 +1,23 @@
 from abc import abstractmethod
+from game.utils.constans import TOP_OFFSET
 
 
 class BaseLevel(object):
 
-    def __init__(self, top_offset):
+    def __init__(self, top_offset=TOP_OFFSET):
         self.top_offset = top_offset
 
         self.name = 'set name to this level!'
-        self.bricks = self.create_level()
-        self._bricks_destroyed = 0
+        self._bricks = self.create_level()
+        self.next_level = None
 
     @property
     def complete(self):
-        return self._bricks_destroyed == len(self.bricks)
+        return len(self._bricks) == 0
 
-    def brick_destroyed(self):
-        self._bricks_destroyed += 1
+    @property
+    def bricks(self):
+        return self._bricks
 
     @abstractmethod
     def create_level(self):
