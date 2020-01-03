@@ -17,7 +17,7 @@ class Level1(BaseLevel):
         bricks = pygame.sprite.Group()
 
         for i, color in enumerate(colors):
-            for j in range(13, 14):
+            for j in range(14):
                 bricks.add(Brick(color, j * BRICK_WIDTH, i * BRICK_HEIGHT + self.top_offset))
 
         return bricks
