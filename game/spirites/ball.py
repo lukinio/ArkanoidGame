@@ -55,7 +55,7 @@ class Ball(pygame.sprite.Sprite):
                 self.angle = random.randint(45, 135)
                 self.rect.y = 540
 
-            collide_bricks = pygame.sprite.spritecollide(self, self._bricks_sprites, True)
+            collide_bricks = pygame.sprite.spritecollide(self, self._bricks_sprites, False)
             if collide_bricks:
                 self.angle = random.randint(-135, -45)
                 for brick in collide_bricks:

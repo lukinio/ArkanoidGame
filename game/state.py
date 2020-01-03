@@ -20,7 +20,6 @@ class InitializeState(GameState):
 
         self._add_sprites()
         self._add_ball_collide_sprites()
-        self.game.create_listeners()
         self.game.back_to_start()
 
     def _add_sprites(self):
