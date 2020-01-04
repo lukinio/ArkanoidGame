@@ -28,6 +28,7 @@ GAME_BACKGROUND = (0, 128, 128)
 FPS = 60.0
 BALL_SPEED = 8
 PADDLE_SPEED = 8
+BONUS_SPEED = 2
 
 # Game Position
 TOP_OFFSET = 100
@@ -39,3 +40,4 @@ SRC = "game/graphics/"
 PADDLE_IMG = SRC + "paddle.png"
 BALL_IMG = SRC + "ball.png"
 LIFE_IMG = SRC + "life.png"
+EXPAND_IMG = SRC + "bonus_expand.png"
