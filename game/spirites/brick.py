@@ -35,5 +35,9 @@ class Brick(pygame.sprite.Sprite):
     def color(self):
         return self._color
 
+    @property
+    def hit_counter(self):
+        return self._hit_counter
+
     def hit(self):
         self._hit_counter += 1
