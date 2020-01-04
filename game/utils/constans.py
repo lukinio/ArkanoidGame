@@ -38,3 +38,4 @@ BALL_X, BALL_Y = PADDLE_X + 45, PADDLE_Y - 10
 SRC = "game/graphics/"
 PADDLE_IMG = SRC + "paddle.png"
 BALL_IMG = SRC + "ball.png"
+LIFE_IMG = SRC + "life.png"

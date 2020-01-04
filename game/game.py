@@ -1,10 +1,11 @@
-from game.spirites.paddle import Paddle
-from game.spirites.ball import Ball
-from game.event import eventManager
 from game.levels.level1 import Level1
-from game.state import InitializeState
+from game.spirites.ball import Ball
 from game.spirites.brick import BrickValue, BrickHitNeed
+from game.spirites.paddle import Paddle
 from game.utils.constans import *
+from game.utils.utility import load_img
+from game.event import eventManager
+from game.state import InitializeState
 
 
 class Game(object):
@@ -16,12 +17,24 @@ class Game(object):
         self._level = level_class()
         self._life = life
         self._score = 0
+
+        self._life_img, _ = load_img(LIFE_IMG)
+        wd = self._life_img.get_width()
+        ht = self._life_img.get_height()
+        self._life_rect = [(i*wd, ht) for i in range(1, life+1)]
+
         self.create_listeners()
         self._all_spirits = pygame.sprite.Group()
         self._state = InitializeState(self)
 
     def run(self):
         self._state.apply()
+        self._check_life()
+
+    def _check_life(self):
+        for i, rect in enumerate(self._life_rect):
+            if i < self._life:
+                self._screen.blit(self._life_img, rect)
 
     def brick_collide(self, brick):
         brick.hit()
