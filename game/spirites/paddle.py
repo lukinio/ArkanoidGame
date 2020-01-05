@@ -83,3 +83,15 @@ class ExpandPaddle(PaddleState):
         self.paddle.image, self.paddle.rect = load_img(PADDLE_EXPAND_IMG)
         self.paddle.rect.center = pos
 
+
+class LaserPaddle(PaddleState):
+
+    def __init__(self, paddle):
+        super().__init__(paddle)
+        self.apply()
+
+    def apply(self):
+        pos = self.paddle.rect.center
+        self.paddle.image, self.paddle.rect = load_img(PADDLE_LASER_IMG)
+        self.paddle.rect.center = pos
+

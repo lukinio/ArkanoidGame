@@ -1,4 +1,4 @@
-from game.spirites.paddle import ExpandPaddle
+from game.spirites.paddle import ExpandPaddle, LaserPaddle
 from game.utils.constans import *
 from game.utils.utility import load_img
 from abc import abstractmethod
@@ -45,7 +45,27 @@ class ExpandBonus(Bonus):
 
     def __init__(self, brick, paddle):
         super().__init__(brick, paddle)
-        self._image, _ = load_img(EXPAND_IMG)
+        self._image, _ = load_img(BONUS_EXPAND_IMG)
 
     def use_bonus(self):
         self.paddle.state = ExpandPaddle(self.paddle)
+
+
+class LifeBonus(Bonus):
+
+    def __init__(self, brick, paddle):
+        super().__init__(brick, paddle)
+        self._image, _ = load_img(BONUS_LIFE_IMG)
+
+    def use_bonus(self):
+        pass
+
+
+class LaserBonus(Bonus):
+
+    def __init__(self, brick, paddle):
+        super().__init__(brick, paddle)
+        self._image, _ = load_img(BONUS_LASER_IMG)
+
+    def use_bonus(self):
+        self.paddle.state = LaserPaddle(self.paddle)

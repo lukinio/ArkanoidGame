@@ -37,8 +37,16 @@ BALL_X, BALL_Y = PADDLE_X + 45, PADDLE_Y - 10
 
 # Graphics
 SRC = "game/graphics/"
-PADDLE_IMG = SRC + "paddle.png"
 BALL_IMG = SRC + "ball.png"
 LIFE_IMG = SRC + "life.png"
-EXPAND_IMG = SRC + "bonus_expand.png"
+
+# Paddle state
+PADDLE_IMG = SRC + "paddle.png"
 PADDLE_EXPAND_IMG = SRC + "paddle_expand.png"
+PADDLE_LASER_IMG = SRC + "paddle_laser.png"
+
+# Bonus
+BONUS_EXPAND_IMG = SRC + "bonus_expand.png"
+BONUS_LASER_IMG = SRC + "bonus_laser.png"
+BONUS_LIFE_IMG = SRC + "bonus_life.png"
+

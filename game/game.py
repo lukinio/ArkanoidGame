@@ -1,6 +1,6 @@
 from game.levels.level1 import Level1
 from game.spirites.ball import Ball
-from game.spirites.bonus import ExpandBonus
+from game.spirites.bonus import ExpandBonus, LaserBonus
 from game.spirites.brick import BrickValue, BrickHitNeed
 from game.spirites.paddle import Paddle
 from game.utils.constans import *
@@ -41,7 +41,7 @@ class Game(object):
         brick.hit()
         if brick.hit_counter >= BrickHitNeed[brick.color]:
             self._score += BrickValue[brick.color]
-            self._all_spirits.add(ExpandBonus(brick, self._paddle))
+            self._all_spirits.add(LaserBonus(brick, self._paddle))
             brick.kill()
 
     def back_to_start(self):
