@@ -1,6 +1,6 @@
 from game.levels.base import *
 from game.spirites.brick import *
-from game.utils.constans import TOP_OFFSET
+from game.utils.constans import TOP_OFFSET, BRICK_WIDTH, BRICK_HEIGHT
 
 
 class Level2(BaseLevel):

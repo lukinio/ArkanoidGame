@@ -1,5 +1,6 @@
-from game.utils.constans import *
-from game.utils.utility import *
+import pygame
+from game.utils.constans import PADDLE_IMG, PADDLE_SPEED, PADDLE_EXPAND_IMG, PADDLE_LASER_IMG
+from game.utils.utility import load_img
 from abc import abstractmethod
 
 

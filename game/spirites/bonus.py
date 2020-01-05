@@ -1,5 +1,6 @@
+import pygame
 from game.spirites.paddle import ExpandPaddle, LaserPaddle
-from game.utils.constans import *
+from game.utils.constans import BONUS_SPEED, BONUS_LASER_IMG, BONUS_LIFE_IMG, BONUS_EXPAND_IMG
 from game.utils.utility import load_img
 from abc import abstractmethod
 

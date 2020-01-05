@@ -1,5 +1,5 @@
-from game.utils.constans import *
-from game.utils.utility import *
+import pygame
+from game.utils.constans import WIDTH, HEIGHT, DISPLAY_CAPTION, FPS
 from game.event import eventManager
 from game.game import Game
 
