@@ -1,3 +1,4 @@
+from game.spirites.paddle import ExpandPaddle
 from game.utils.constans import *
 from game.utils.utility import load_img
 from abc import abstractmethod
@@ -11,20 +12,20 @@ class Bonus(pygame.sprite.Sprite):
         self._rect = brick.rect
         self._paddle_sprites = pygame.sprite.GroupSingle()
         self._paddle_sprites.add(paddle)
+        self._paddle = paddle
         self._area = pygame.display.get_surface().get_rect()
 
     def update(self):
         self._rect = self._rect.move(0, BONUS_SPEED)
-        collide_paddle = pygame.sprite.spritecollide(self, self._paddle_sprites, False)
-        if collide_paddle:
-            self.apply()
+        if pygame.sprite.spritecollide(self, self._paddle_sprites, False):
+            self.use_bonus()
             self.kill()
 
         if not self._area.contains(self._rect):
             self.kill()
 
     @abstractmethod
-    def apply(self):
+    def use_bonus(self):
         pass
 
     @property
@@ -35,6 +36,10 @@ class Bonus(pygame.sprite.Sprite):
     def rect(self):
         return self._rect
 
+    @property
+    def paddle(self):
+        return self._paddle
+
 
 class ExpandBonus(Bonus):
 
@@ -42,5 +47,5 @@ class ExpandBonus(Bonus):
         super().__init__(brick, paddle)
         self._image, _ = load_img(EXPAND_IMG)
 
-    def apply(self):
-        print("expand")
+    def use_bonus(self):
+        self.paddle.state = ExpandPaddle(self.paddle)
