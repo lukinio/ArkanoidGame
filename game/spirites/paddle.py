@@ -1,5 +1,5 @@
 import pygame
-from game.utils.constans import PADDLE_IMG, PADDLE_SPEED, PADDLE_EXPAND_IMG, PADDLE_LASER_IMG
+from game.utils.constans import WIDTH, PADDLE_IMG, PADDLE_SPEED, PADDLE_EXPAND_IMG, PADDLE_LASER_IMG
 from game.utils.utility import load_img
 from abc import abstractmethod
 
@@ -80,8 +80,12 @@ class ExpandPaddle(PaddleState):
         self.apply()
 
     def apply(self):
-        pos = self.paddle.rect.center
+        pos = list(self.paddle.rect.center)
         self.paddle.image, self.paddle.rect = load_img(PADDLE_EXPAND_IMG)
+        if pos[0] < self.paddle.image.get_width() / 2:
+            pos[0] = self.paddle.image.get_width() / 2
+        elif pos[0] > WIDTH - self.paddle.image.get_width() / 2:
+            pos[0] = WIDTH - self.paddle.image.get_width() / 2
         self.paddle.rect.center = pos
 
 
