@@ -82,10 +82,11 @@ class ExpandPaddle(PaddleState):
     def apply(self):
         pos = list(self.paddle.rect.center)
         self.paddle.image, self.paddle.rect = load_img(PADDLE_EXPAND_IMG)
-        if pos[0] < self.paddle.image.get_width() / 2:
-            pos[0] = self.paddle.image.get_width() / 2
-        elif pos[0] > WIDTH - self.paddle.image.get_width() / 2:
-            pos[0] = WIDTH - self.paddle.image.get_width() / 2
+        wd = self.paddle.image.get_width() / 2
+        if pos[0] < wd:
+            pos[0] = wd
+        elif pos[0] > WIDTH - wd:
+            pos[0] = WIDTH - wd
         self.paddle.rect.center = pos
 
 
