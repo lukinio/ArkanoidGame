@@ -49,13 +49,13 @@ class ExpandBonus(Bonus):
         self._image, _ = load_img(BONUS_EXPAND_IMG)
 
     def use_bonus(self):
-        self.game.paddle.state = ExpandPaddle(self.game.paddle)
+        self.game.paddle.state = ExpandPaddle(self.game)
 
 
 class LifeBonus(Bonus):
 
-    def __init__(self, brick, paddle):
-        super().__init__(brick, paddle)
+    def __init__(self, brick, game):
+        super().__init__(brick, game)
         self._image, _ = load_img(BONUS_LIFE_IMG)
 
     def use_bonus(self):
@@ -65,9 +65,9 @@ class LifeBonus(Bonus):
 
 class LaserBonus(Bonus):
 
-    def __init__(self, brick, paddle):
-        super().__init__(brick, paddle)
+    def __init__(self, brick, game):
+        super().__init__(brick, game)
         self._image, _ = load_img(BONUS_LASER_IMG)
 
     def use_bonus(self):
-        self.game.paddle.state = LaserPaddle(self.game.paddle)
+        self.game.paddle.state = LaserPaddle(self.game)

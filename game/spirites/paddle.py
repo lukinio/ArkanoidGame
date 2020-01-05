@@ -1,6 +1,8 @@
 import pygame
+from game.spirites.bullet import Bullet
 from game.utils.constans import WIDTH, PADDLE_IMG, PADDLE_SPEED, PADDLE_EXPAND_IMG, PADDLE_LASER_IMG
 from game.utils.utility import load_img
+from game.event import eventManager
 from abc import abstractmethod
 
 
@@ -54,50 +56,58 @@ class Paddle(pygame.sprite.Sprite):
 
 
 class PaddleState:
-    def __init__(self, paddle):
-        self.paddle = paddle
+    def __init__(self, game):
+        self._game = game
 
     @abstractmethod
     def apply(self):
         pass
 
+    @property
+    def game(self):
+        return self._game
+
 
 class NormalPaddle(PaddleState):
 
-    def __init__(self, paddle):
-        super().__init__(paddle)
+    def __init__(self, game):
+        super().__init__(game)
 
     def apply(self):
-        pos = self.paddle.rect.center
-        self.paddle.image, self.paddle.rect = load_img(PADDLE_IMG)
-        self.paddle.rect.center = pos
+        pos = self.game.paddle.rect.center
+        self.game.paddle.image, self.game.paddle.rect = load_img(PADDLE_IMG)
+        self.game.paddle.rect.center = pos
 
 
 class ExpandPaddle(PaddleState):
 
-    def __init__(self, paddle):
-        super().__init__(paddle)
+    def __init__(self, game):
+        super().__init__(game)
         self.apply()
 
     def apply(self):
-        pos = list(self.paddle.rect.center)
-        self.paddle.image, self.paddle.rect = load_img(PADDLE_EXPAND_IMG)
-        wd = self.paddle.image.get_width() / 2
+        pos = list(self.game.paddle.rect.center)
+        self.game.paddle.image, self.game.paddle.rect = load_img(PADDLE_EXPAND_IMG)
+        wd = self.game.paddle.image.get_width() / 2
         if pos[0] < wd:
             pos[0] = wd
         elif pos[0] > WIDTH - wd:
             pos[0] = WIDTH - wd
-        self.paddle.rect.center = pos
+        self.game.paddle.rect.center = pos
 
 
 class LaserPaddle(PaddleState):
 
-    def __init__(self, paddle):
-        super().__init__(paddle)
+    def __init__(self, game):
+        super().__init__(game)
         self.apply()
 
-    def apply(self):
-        pos = self.paddle.rect.center
-        self.paddle.image, self.paddle.rect = load_img(PADDLE_LASER_IMG)
-        self.paddle.rect.center = pos
+        def shoot(event):
+            if event.key == pygame.K_SPACE:
+                self.game.all_spirits.add(Bullet(self.game.paddle.rect.center))
+        eventManager.subscribe(pygame.KEYDOWN, shoot)
 
+    def apply(self):
+        pos = self.game.paddle.rect.center
+        self.game.paddle.image, self.game.paddle.rect = load_img(PADDLE_LASER_IMG)
+        self.game.paddle.rect.center = pos

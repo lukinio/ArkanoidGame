@@ -1,6 +1,5 @@
 from game.levels.level1 import Level1
 from game.spirites.ball import Ball
-from game.spirites.bonus import ExpandBonus, LaserBonus
 from game.spirites.brick import BrickValue, BrickHitNeed
 from game.spirites.paddle import Paddle
 from game.utils.constans import *

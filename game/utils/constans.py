@@ -29,6 +29,7 @@ FPS = 60.0
 BALL_SPEED = 8
 PADDLE_SPEED = 8
 BONUS_SPEED = 2
+BULLET_SPEED = -10
 
 # Game Position
 TOP_OFFSET = 100
@@ -39,6 +40,7 @@ BALL_X, BALL_Y = PADDLE_X + 45, PADDLE_Y - 10
 SRC = "game/graphics/"
 BALL_IMG = SRC + "ball.png"
 LIFE_IMG = SRC + "life.png"
+BULLET_IMG = SRC + "bullet.png"
 
 # Paddle state
 PADDLE_IMG = SRC + "paddle.png"
