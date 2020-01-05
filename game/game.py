@@ -20,9 +20,8 @@ class Game(object):
         self._score = 0
 
         self._life_img, _ = load_img(LIFE_IMG)
-        wd = self._life_img.get_width()
-        ht = self._life_img.get_height()
-        self._life_rect = [(i*wd, ht) for i in range(1, life+1)]
+        self._life_rect = None
+        self.check_life()
 
         self.create_listeners()
         self._all_spirits = pygame.sprite.Group()
@@ -30,19 +29,23 @@ class Game(object):
 
     def run(self):
         self._state.apply()
-        self._check_life()
+        self._show_life()
 
-    def _check_life(self):
+    def _show_life(self):
         for i, rect in enumerate(self._life_rect):
             if i < self._life:
                 self._screen.blit(self._life_img, rect)
+
+    def check_life(self):
+        wd = self._life_img.get_width()
+        self._life_rect = [(i*wd, wd) for i in range(1, self._life+1)]
 
     def brick_collide(self, brick):
         brick.hit()
         if brick.hit_counter >= BrickHitNeed[brick.color]:
             self._score += BrickValue[brick.color]
             if brick.has_bonus:
-                self._all_spirits.add(brick.bonus(brick, self._paddle))
+                self._all_spirits.add(brick.bonus(brick, self))
             brick.kill()
 
     def back_to_start(self):

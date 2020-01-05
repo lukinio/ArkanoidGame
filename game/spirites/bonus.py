@@ -7,13 +7,13 @@ from abc import abstractmethod
 
 class Bonus(pygame.sprite.Sprite):
 
-    def __init__(self, brick, paddle):
+    def __init__(self, brick, game):
         super().__init__()
+        self._game = game
         self._image = None
         self._rect = brick.rect
         self._paddle_sprites = pygame.sprite.GroupSingle()
-        self._paddle_sprites.add(paddle)
-        self._paddle = paddle
+        self._paddle_sprites.add(self._game.paddle)
         self._area = pygame.display.get_surface().get_rect()
 
     def update(self):
@@ -38,18 +38,18 @@ class Bonus(pygame.sprite.Sprite):
         return self._rect
 
     @property
-    def paddle(self):
-        return self._paddle
+    def game(self):
+        return self._game
 
 
 class ExpandBonus(Bonus):
 
-    def __init__(self, brick, paddle):
-        super().__init__(brick, paddle)
+    def __init__(self, brick, game):
+        super().__init__(brick, game)
         self._image, _ = load_img(BONUS_EXPAND_IMG)
 
     def use_bonus(self):
-        self.paddle.state = ExpandPaddle(self.paddle)
+        self.game.paddle.state = ExpandPaddle(self.game.paddle)
 
 
 class LifeBonus(Bonus):
@@ -59,7 +59,8 @@ class LifeBonus(Bonus):
         self._image, _ = load_img(BONUS_LIFE_IMG)
 
     def use_bonus(self):
-        pass
+        self.game.life += 1
+        self.game.check_life()
 
 
 class LaserBonus(Bonus):
@@ -69,4 +70,4 @@ class LaserBonus(Bonus):
         self._image, _ = load_img(BONUS_LASER_IMG)
 
     def use_bonus(self):
-        self.paddle.state = LaserPaddle(self.paddle)
+        self.game.paddle.state = LaserPaddle(self.game.paddle)
