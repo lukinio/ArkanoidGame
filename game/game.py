@@ -41,7 +41,8 @@ class Game(object):
         brick.hit()
         if brick.hit_counter >= BrickHitNeed[brick.color]:
             self._score += BrickValue[brick.color]
-            self._all_spirits.add(LaserBonus(brick, self._paddle))
+            if brick.has_bonus:
+                self._all_spirits.add(brick.bonus(brick, self._paddle))
             brick.kill()
 
     def back_to_start(self):

@@ -1,6 +1,9 @@
-from game.utils.utility import *
-from game.utils.constans import *
+import pygame
+from game.spirites.bonus import ExpandBonus, LifeBonus, LaserBonus
+from game.utils.utility import load_img
+from game.utils.constans import SRC, LUCKY_BRICK
 from collections import defaultdict
+from random import shuffle
 
 BrickHitNeed = defaultdict(lambda: 1)
 BrickHitNeed.update({
@@ -21,6 +24,8 @@ BrickValue = {
     "pink": 30
 }
 
+BONUSES = [ExpandBonus, LifeBonus, LaserBonus]
+
 
 class Brick(pygame.sprite.Sprite):
 
@@ -30,6 +35,20 @@ class Brick(pygame.sprite.Sprite):
         self.image, self.rect = load_img(SRC+'brick_{}.png'.format(brick_color))
         self.rect.x, self.rect.y = x, y
         self._hit_counter = 0
+        shuffle(LUCKY_BRICK)
+        self._has_bonus = LUCKY_BRICK[0]
+        self._bonus = None
+
+    @property
+    def has_bonus(self):
+        return self._has_bonus
+
+    @property
+    def bonus(self):
+        if self.has_bonus:
+            shuffle(BONUSES)
+            self._bonus = BONUSES[0]
+        return self._bonus
 
     @property
     def color(self):

@@ -50,3 +50,5 @@ BONUS_EXPAND_IMG = SRC + "bonus_expand.png"
 BONUS_LASER_IMG = SRC + "bonus_laser.png"
 BONUS_LIFE_IMG = SRC + "bonus_life.png"
 
+# List to shuffle
+LUCKY_BRICK = [True, False, False]
