@@ -3,9 +3,13 @@ from collections import defaultdict
 
 
 class EventManager:
+    _instance = None
 
-    def __init__(self):
-        self._listeners = defaultdict(list)
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+            cls._listeners = defaultdict(list)
+        return cls._instance
 
     def notify(self):
         for event in pygame.event.get():
