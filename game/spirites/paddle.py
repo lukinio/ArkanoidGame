@@ -104,7 +104,9 @@ class LaserPaddle(PaddleState):
 
         def shoot(event):
             if event.key == pygame.K_SPACE:
-                self.game.all_spirits.add(Bullet(self.game.paddle.rect.center))
+                bullet = Bullet(self.game.paddle.rect.center)
+                bullet.add_collide_sprites(self.game.level.bricks, on_collide=self.game.brick_collide)
+                self.game.all_spirits.add(bullet)
         eventManager.subscribe(pygame.KEYDOWN, shoot)
 
     def apply(self):
