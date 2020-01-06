@@ -49,7 +49,6 @@ class ExpandBonus(Bonus):
         self._image, _ = load_img(BONUS_EXPAND_IMG)
 
     def use_bonus(self):
-        print("expand use_bonus")
         self.game.paddle.state.turn_off()
         self.game.paddle.state = ExpandPaddle(self.game)
 

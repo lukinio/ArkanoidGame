@@ -1,4 +1,5 @@
 from abc import abstractmethod
+from game.spirites.paddle import NormalPaddle
 from game.utils.constans import *
 from game.utils.utility import draw_text
 
@@ -65,6 +66,8 @@ class LoseLifeState(GameState):
     def apply(self):
         if self.game.life > 0:
             self.game.state = ScoreState(self.game)
+            self.game.paddle.state.turn_off()
+            self.game.paddle.state = NormalPaddle(self.game)
         else:
             self.game.state = GameOverState(self.game)
 
