@@ -3,7 +3,7 @@ from game.spirites.bonus import ExpandBonus, LifeBonus, LaserBonus
 from game.utils.utility import load_img
 from game.utils.constans import SRC, LUCKY_BRICK
 from collections import defaultdict
-from random import shuffle
+from random import shuffle, randint
 
 BrickHitNeed = defaultdict(lambda: 1)
 BrickHitNeed.update({
@@ -36,7 +36,7 @@ class Brick(pygame.sprite.Sprite):
         self.rect.x, self.rect.y = x, y
         self._hit_counter = 0
         shuffle(LUCKY_BRICK)
-        self._has_bonus = LUCKY_BRICK[0]
+        self._has_bonus = LUCKY_BRICK[randint(0, 2)]
         self._bonus = None
 
     @property
@@ -47,7 +47,7 @@ class Brick(pygame.sprite.Sprite):
     def bonus(self):
         if self.has_bonus:
             shuffle(BONUSES)
-            self._bonus = BONUSES[0]
+            self._bonus = BONUSES[randint(0, 2)]
         return self._bonus
 
     @property
