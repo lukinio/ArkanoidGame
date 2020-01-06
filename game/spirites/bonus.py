@@ -1,5 +1,5 @@
 import pygame
-from game.spirites.paddle import ExpandPaddle, LaserPaddle
+from game.spirites.paddle import NormalPaddle, ExpandPaddle, LaserPaddle
 from game.utils.constans import BONUS_SPEED, BONUS_LASER_IMG, BONUS_LIFE_IMG, BONUS_EXPAND_IMG
 from game.utils.utility import load_img
 from abc import abstractmethod
@@ -49,6 +49,8 @@ class ExpandBonus(Bonus):
         self._image, _ = load_img(BONUS_EXPAND_IMG)
 
     def use_bonus(self):
+        print("expand use_bonus")
+        self.game.paddle.state.turn_off()
         self.game.paddle.state = ExpandPaddle(self.game)
 
 
@@ -61,6 +63,8 @@ class LifeBonus(Bonus):
     def use_bonus(self):
         self.game.life += 1
         self.game.check_life()
+        self.game.paddle.state.turn_off()
+        self.game.paddle.state = NormalPaddle(self.game)
 
 
 class LaserBonus(Bonus):
@@ -70,4 +74,5 @@ class LaserBonus(Bonus):
         self._image, _ = load_img(BONUS_LASER_IMG)
 
     def use_bonus(self):
+        self.game.paddle.state.turn_off()
         self.game.paddle.state = LaserPaddle(self.game)

@@ -16,7 +16,7 @@ class Paddle(pygame.sprite.Sprite):
         self._area = pygame.display.get_surface().get_rect()
         self.move_pos = [0, 0]
 
-        self._state = NormalPaddle(self)
+        self._state = None
 
     def update(self):
         new_pos = self.rect.move(self.move_pos)
@@ -63,6 +63,10 @@ class PaddleState:
     def apply(self):
         pass
 
+    @abstractmethod
+    def turn_off(self):
+        pass
+
     @property
     def game(self):
         return self._game
@@ -72,11 +76,15 @@ class NormalPaddle(PaddleState):
 
     def __init__(self, game):
         super().__init__(game)
+        self.apply()
 
     def apply(self):
         pos = self.game.paddle.rect.center
         self.game.paddle.image, self.game.paddle.rect = load_img(PADDLE_IMG)
         self.game.paddle.rect.center = pos
+
+    def turn_off(self):
+        pass
 
 
 class ExpandPaddle(PaddleState):
@@ -95,21 +103,28 @@ class ExpandPaddle(PaddleState):
             pos[0] = WIDTH - wd
         self.game.paddle.rect.center = pos
 
+    def turn_off(self):
+        self.game.paddle.state = NormalPaddle(self.game)
+
 
 class LaserPaddle(PaddleState):
 
     def __init__(self, game):
         super().__init__(game)
         self.apply()
-
-        def shoot(event):
-            if event.key == pygame.K_SPACE:
-                bullet = Bullet(self.game.paddle.rect.center)
-                bullet.add_collide_sprites(self.game.level.bricks, on_collide=self.game.brick_collide)
-                self.game.all_spirits.add(bullet)
-        eventManager.subscribe(pygame.KEYDOWN, shoot)
+        eventManager.subscribe(pygame.KEYDOWN, self.shoot)
 
     def apply(self):
         pos = self.game.paddle.rect.center
         self.game.paddle.image, self.game.paddle.rect = load_img(PADDLE_LASER_IMG)
         self.game.paddle.rect.center = pos
+
+    def turn_off(self):
+        eventManager.unsubscribe(pygame.KEYDOWN, self.shoot)
+        self.game.paddle.state = NormalPaddle(self.game)
+
+    def shoot(self, event):
+        if event.key == pygame.K_SPACE:
+            bullet = Bullet(self.game.paddle.rect.center)
+            bullet.add_collide_sprites(self.game.level.bricks, on_collide=self.game.brick_collide)
+            self.game.all_spirits.add(bullet)

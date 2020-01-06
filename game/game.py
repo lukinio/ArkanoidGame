@@ -1,5 +1,6 @@
 from game.levels.level1 import Level1
 from game.spirites.ball import Ball
+from game.spirites.bonus import NormalPaddle
 from game.spirites.brick import BrickValue, BrickHitNeed
 from game.spirites.paddle import Paddle
 from game.utils.constans import *
@@ -25,6 +26,7 @@ class Game(object):
         self.create_listeners()
         self._all_spirits = pygame.sprite.Group()
         self._state = InitializeState(self)
+        self._paddle.state = NormalPaddle(self)
 
     def run(self):
         self._state.apply()
