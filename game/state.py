@@ -80,6 +80,8 @@ class LoadNextLevelState(GameState):
     def apply(self):
         if self.game.level.next_level is not None:
             self.game.level = self.game.level.next_level()
+            self.game.paddle.state.turn_off()
+            self.game.paddle.state = NormalPaddle(self.game)
             self.game.state = InitializeState(self.game)
         else:
             self.game.state = GameOverState(self.game)
