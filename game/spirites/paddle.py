@@ -20,8 +20,12 @@ class Paddle(pygame.sprite.Sprite):
 
     def update(self):
         new_pos = self.rect.move(self.move_pos)
-        if self._area.contains(new_pos):
-            self._rect = new_pos
+        if not self._area.contains(new_pos):
+            if new_pos.x < 0:
+                new_pos.x = 0
+            elif new_pos.x > WIDTH - self.image.get_width():
+                new_pos.x = WIDTH - self.image.get_width()
+        self._rect = new_pos
         pygame.event.pump()
 
     def move_left(self):
