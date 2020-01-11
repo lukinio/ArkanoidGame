@@ -1,8 +1,14 @@
-import pygame
+"""
+module docstring
+"""
 from collections import defaultdict
+import pygame
 
 
 class EventManager:
+    """
+    class supporting events in pygame
+    """
     _instance = None
 
     def __new__(cls):
@@ -12,23 +18,33 @@ class EventManager:
         return cls._instance
 
     def notify(self):
+        """
+        support all event
+        :return:
+        """
         for event in pygame.event.get():
-            try:
-                listeners = self._listeners[event.type]
-            except KeyError:
-                raise Exception("No listeners subscribe for this event")
-            else:
-                for listener in listeners:
-                    listener(event)
+            for listener in self._listeners[event.type]:
+                listener(event)
 
     def subscribe(self, event_type, *listeners):
+        """
+        start supporting some listeners
+        :param event_type:
+        :param listeners:
+        :return None:
+        """
         self._listeners[event_type] += listeners
 
     def unsubscribe(self, *listeners):
+        """
+        stop supporting some listeners
+        :param listeners:
+        :return None:
+        """
         for _, evt_listeners in self._listeners.items():
-            for l in evt_listeners:
-                if l in listeners:
-                    evt_listeners.remove(l)
+            for listener in evt_listeners:
+                if listener in listeners:
+                    evt_listeners.remove(listener)
 
 
-eventManager = EventManager()
+EVENT_MANAGER = EventManager()

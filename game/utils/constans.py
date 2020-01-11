@@ -1,3 +1,6 @@
+"""
+Constans use in game
+"""
 import pygame
 
 # Size of window
@@ -34,7 +37,7 @@ BULLET_SPEED = -10
 # Game Position
 TOP_OFFSET = 100
 PADDLE_X, PADDLE_Y = WIDTH / 2, HEIGHT - 50
-BALL_X, BALL_Y = PADDLE_X + 45, PADDLE_Y - 10
+BALL_X, BALL_Y = PADDLE_X + 45, PADDLE_Y - 9
 
 # Graphics
 SRC = "game/graphics/"

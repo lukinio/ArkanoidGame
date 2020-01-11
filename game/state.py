@@ -1,20 +1,36 @@
+"""
+state of game
+"""
 from abc import abstractmethod
 from game.spirites.paddle import NormalPaddle
-from game.utils.constans import *
+from game.utils.constans import GAME_BACKGROUND, WIDTH, HEIGHT
 from game.utils.utility import draw_text
 
 
-class GameState(object):
+class GameState:
+    """
+    abstract class represent state of game
+    """
 
     def __init__(self, game):
+        """
+        :param game:
+        """
         self.game = game
 
     @abstractmethod
     def apply(self):
-        pass
+        """
+        do some stuff depending on state
+        :return:
+        """
 
 
 class InitializeState(GameState):
+    """
+    class represent state before game starts
+    create and add collisions between sprites
+    """
 
     def __init__(self, game):
         super().__init__(game)
@@ -24,24 +40,32 @@ class InitializeState(GameState):
         self.game.back_to_start()
 
     def _add_sprites(self):
+        """
+        add all sprite to draw on screen
+        :return:
+        """
         self.game.all_spirits.empty()
         self.game.all_spirits.add(self.game.paddle)
         self.game.all_spirits.add(self.game.ball)
         self.game.all_spirits.add(self.game.level.bricks)
 
     def _add_ball_collide_sprites(self):
+        """
+        add all ball collision
+        :return:
+        """
         self.game.ball.remove_all_collide_sprites()
-        self.game.ball.add_collide_sprites(self.game.paddle, True)
-        self.game.ball.add_collide_sprites(self.game.level.bricks, on_collide=self.game.brick_collide)
+        self.game.ball.add_paddle_spirit(self.game.paddle)
+        self.game.ball.add_brick_sprites(self.game.level.bricks, on_collide=self.game.brick_collide)
 
     def apply(self):
         self.game.state = ScoreState(self.game)
 
 
 class ScoreState(GameState):
-
-    def __init__(self, game):
-        super().__init__(game)
+    """
+    class represent state when player can get the point
+    """
 
     def apply(self):
         self.game.screen.fill(GAME_BACKGROUND)
@@ -57,6 +81,9 @@ class ScoreState(GameState):
 
 
 class LoseLifeState(GameState):
+    """
+    class represent state when ball is off screen
+    """
 
     def __init__(self, game):
         super().__init__(game)
@@ -73,9 +100,9 @@ class LoseLifeState(GameState):
 
 
 class LoadNextLevelState(GameState):
-
-    def __init__(self, game):
-        super().__init__(game)
+    """
+    class represent state when player complete level
+    """
 
     def apply(self):
         if self.game.level.next_level is not None:
@@ -88,9 +115,9 @@ class LoadNextLevelState(GameState):
 
 
 class GameOverState(GameState):
-
-    def __init__(self, game):
-        super().__init__(game)
+    """
+    class represent state when player end all levels
+    """
 
     def apply(self):
         draw_text(self.game.screen, str(self.game.score), WIDTH/2, HEIGHT/2, 50)

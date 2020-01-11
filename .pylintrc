@@ -1,0 +1,5 @@
+[MASTER]
+extension-pkg-whitelist=pygame
+disable=
+        too-few-public-methods,
+        too-many-instance-attributes
