@@ -2,7 +2,7 @@
 Game
 """
 import pygame
-from game.levels.level1 import Level2
+from game.levels.level1 import Level1
 from game.spirites.ball import Ball
 from game.spirites.bonus import NormalPaddle
 from game.spirites.brick import BRICK_VALUE, BRICK_HIT_NEED
@@ -18,7 +18,7 @@ class Game:
     class represent whole game which hold all element
     """
 
-    def __init__(self, level_class=Level2, life=3):
+    def __init__(self, level_class=Level1, life=3):
         """
         :param level_class:
         :param life:
