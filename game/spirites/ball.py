@@ -2,9 +2,8 @@
 Ball
 """
 import math
-import random
 import pygame
-from game.utils.constans import BALL_IMG, BALL_SPEED
+from game.utils.constans import BALL_IMG, BALL_SPEED, HEIGHT
 from game.utils.utility import load_img
 
 
@@ -12,7 +11,6 @@ class Ball(pygame.sprite.Sprite):
     """
     class represent ball
     """
-    angle = 70
 
     def __init__(self, pos_x, pos_y):
         """
@@ -21,9 +19,12 @@ class Ball(pygame.sprite.Sprite):
         """
         super().__init__()
         self._image, self._rect = load_img(BALL_IMG)
-        self.rect.x, self.rect.y = pos_x, pos_y
+        self._rect.x, self._rect.y = pos_x, pos_y
         self._moving = False
-        self.move_pos = [0, 0]
+        self.angle = 70
+
+        self.ball_velocity = pygame.math.Vector2()
+        self.ball_velocity[:] = 1, -1
 
         self._area = pygame.display.get_surface().get_rect()
         self._bricks_sprites = pygame.sprite.Group()
@@ -72,8 +73,7 @@ class Ball(pygame.sprite.Sprite):
         self._paddle_sprites.empty()
         self._bricks_sprites.empty()
 
-    @staticmethod
-    def calc_new_pos(rect, angle):
+    def calc_new_pos(self, rect, angle):
         """
         calc new position for ball
         :param rect:
@@ -81,7 +81,8 @@ class Ball(pygame.sprite.Sprite):
         :return:
         """
         angle_rad = math.radians(angle)
-        return rect.move(BALL_SPEED * math.cos(angle_rad), -BALL_SPEED * math.sin(angle_rad))
+        return rect.move(self.ball_velocity.x * BALL_SPEED * math.cos(angle_rad),
+                         self.ball_velocity.y * BALL_SPEED * math.sin(angle_rad))
 
     def update(self):
         """
@@ -89,27 +90,40 @@ class Ball(pygame.sprite.Sprite):
         :return:
         """
         if self._moving:
-            new_pos = self.calc_new_pos(self._rect, Ball.angle)
+            new_pos = self.calc_new_pos(self._rect, self.angle)
             if not self._area.contains(new_pos):
-                if new_pos.y < self.image.get_height():
-                    Ball.angle = -(180 - Ball.angle) % 360
-                Ball.angle = (180 - Ball.angle) % 360
-                new_pos = self.calc_new_pos(self._rect, Ball.angle)
+                if new_pos.y < 0:
+                    self.ball_velocity.y *= -1
+                if new_pos.x < 0 or new_pos.x > HEIGHT - 10:
+                    self.ball_velocity.x *= -1
+                new_pos = self.calc_new_pos(self._rect, self.angle)
+            else:
+                collide_bricks = pygame.sprite.spritecollide(self, self._bricks_sprites, False)
+                paddle = pygame.sprite.spritecollide(self, self._paddle_sprites, False)
+                if collide_bricks:
+                    first_brick = collide_bricks[0]
+                    edge = first_brick.collision_edge(self)
+                    self.ball_velocity.reflect_ip(edge)
+                    self.brick_collide(first_brick)
+
+                elif paddle:
+                    pad = paddle[0]
+                    self.rect.bottom = pad.rect.top
+                    self.ball_velocity.y *= -1
+                    if self.rect.centerx > pad.rect.centerx:
+                        if self.ball_velocity.x == -1:
+                            self.ball_velocity.x *= -1
+                    else:
+                        if self.ball_velocity.x == 1:
+                            self.ball_velocity.x *= -1
+
+                new_pos = self.calc_new_pos(self._rect, self.angle)
+
             self._rect = new_pos
 
-            paddle = pygame.sprite.spritecollide(self, self._paddle_sprites, False)
-            if paddle:
-                pad = paddle[0]
-                self.rect.bottom = pad.rect.top
-                Ball.angle = random.randint(45, 135)
-
-            collide_bricks = pygame.sprite.spritecollide(self, self._bricks_sprites, False)
-            if collide_bricks:
-                Ball.angle = random.randint(-135, -45)
-                for brick in collide_bricks:
-                    self.brick_collide(brick)
-
         else:
+            self.angle = 70
+            self.ball_velocity[:] = 1, -1
             paddle = pygame.sprite.spritecollide(self, self._paddle_sprites, False)
             self._rect.x = paddle[0].rect.x + 45
 
