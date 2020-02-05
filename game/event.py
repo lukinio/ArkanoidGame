@@ -33,6 +33,7 @@ class EventManager:
         :param listeners:
         :return None:
         """
+        assert len(listeners) > 0
         self._listeners[event_type] += listeners
 
     def unsubscribe(self, *listeners):
@@ -41,9 +42,10 @@ class EventManager:
         :param listeners:
         :return None:
         """
+        assert len(listeners) > 0
         for _, evt_listeners in self._listeners.items():
-            for listener in evt_listeners:
-                if listener in listeners:
+            for listener in listeners:
+                if listener in evt_listeners:
                     evt_listeners.remove(listener)
 
 
