@@ -35,10 +35,14 @@ class Brick(pygame.sprite.Sprite):
     """
     class represent enemy to destroy
     """
-    vertical = pygame.math.Vector2()
-    horizontal = pygame.math.Vector2()
+
+    t_left, t_right, b_left, b_right = Vector2(), Vector2(), Vector2(), Vector2()
+    ball_center = Vector2()
+
+    horizontal, vertical, corner = Vector2(), Vector2(), Vector2()
     vertical[:] = 1, 0
     horizontal[:] = 0, 1
+    corner[:] = -1, 1
 
     def __init__(self, brick_color, pos_x, pos_y):
         """
@@ -57,39 +61,42 @@ class Brick(pygame.sprite.Sprite):
         self._has_bonus = LUCKY_BRICK[randint(0, len(LUCKY_BRICK)-1)]
         self._bonus = None
 
-    @staticmethod
-    def calc_func(point_a, point_b, x_coord):
-        """
-        calculating the value at x for a straight line passing through AB
-        :param point_a:
-        :param point_b:
-        :param x_coord:
-        :return float:
-        """
-        tmp = (point_a.y - point_b.y) / (point_a.x - point_b.x)
-        return tmp * x_coord + (point_a.y - tmp * point_a.x)
-
     def collision_edge(self, ball):
         """
-        checks which edge has collided with ball
+        checks which edge has collided with ball and returns vector to reflect
         :param ball:
-        :return String:
+        :return Vector2:
         """
-        top_left, top_right, bottom_left, bottom_right = Vector2(), Vector2(), Vector2(), Vector2()
+        Brick.t_left[:] = self.rect.left, self.rect.top
+        Brick.t_right[:] = self.rect.right, self.rect.top
+        Brick.b_left[:] = self.rect.left, self.rect.bottom
+        Brick.b_right[:] = self.rect.right, self.rect.bottom
+        Brick.ball_center[:] = ball.rect.centerx, ball.rect.centery
 
-        top_left[:] = self.rect.left, self.rect.top
-        top_right[:] = self.rect.right, self.rect.top
-        bottom_left[:] = self.rect.left, self.rect.bottom
-        bottom_right[:] = self.rect.right, self.rect.bottom
+        vec1 = Brick.t_right - Brick.b_left
+        vec2 = Brick.b_right - Brick.t_left
 
-        if self.calc_func(bottom_left, top_right, ball.rect.centerx) < ball.rect.centery:
-            if self.calc_func(top_left, bottom_right, ball.rect.centerx) < ball.rect.centery:
-                return Brick.horizontal
-            return Brick.vertical
+        ball_vec1 = Brick.ball_center - Brick.b_left
+        ball_vec2 = Brick.ball_center - Brick.t_left
 
-        if self.calc_func(top_left, bottom_right, ball.rect.centerx) < ball.rect.centery:
-            return Brick.vertical
-        return Brick.horizontal
+        check_point_vec1 = vec1.cross(ball_vec1)
+        check_point_vec2 = vec2.cross(ball_vec2)
+
+        if check_point_vec1 > 0:
+            if check_point_vec2 > 0:
+                return Brick.horizontal  # bounce from bottom side of brick
+            if check_point_vec2 < 0:
+                return Brick.vertical    # bounce from right side of brick
+            return Brick.corner          # bounce from bottom-right-corner of brick
+
+        if check_point_vec1 < 0:
+            if check_point_vec2 > 0:
+                return Brick.vertical    # bounce from left side of brick
+            if check_point_vec2 < 0:
+                return Brick.horizontal  # bounce from top side of brick
+            return Brick.corner          # bounce from top-left-corner of brick
+
+        return Brick.corner              # bounce from bottom-left/top-right-corner of brick
 
     @property
     def has_bonus(self):

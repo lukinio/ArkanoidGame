@@ -1,5 +1,7 @@
 [MASTER]
 extension-pkg-whitelist=pygame
 disable=
-        too-few-public-methods,         # states don't need mote than one public method
-        too-many-instance-attributes    # class game and ball must have many attributes if not game won't work
+        too-few-public-methods,          # states don't need mote than one public method
+        too-many-instance-attributes,    # class game and ball must have many attributes if not game won't work
+        too-many-return-statements,      # collision_edge in class brick must have as many return statements because
+                                         # there are so many cases
