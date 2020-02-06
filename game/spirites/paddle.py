@@ -25,7 +25,8 @@ class Paddle(pygame.sprite.Sprite):
         self._rect.x, self._rect.y = pos_x, pos_y
 
         self._area = pygame.display.get_surface().get_rect()
-        self.move_pos = [0, 0]
+        self.paddle_velocity = pygame.math.Vector2()
+        self.paddle_velocity[:] = 0, 0
 
         self._state = None
 
@@ -34,28 +35,34 @@ class Paddle(pygame.sprite.Sprite):
         update position of paddle sprite
         :return:
         """
-        new_pos = self.rect.move(self.move_pos)
+        new_pos = self.rect.move(int(self.paddle_velocity.x), 0)
         if not self._area.contains(new_pos):
             if new_pos.x < 0:
                 new_pos.x = 0
-            elif new_pos.x > WIDTH - self.image.get_width():
-                new_pos.x = WIDTH - self.image.get_width()
+            elif new_pos.x > WIDTH - self._rect.width:
+                new_pos.x = WIDTH - self._rect.width
         self._rect = new_pos
-        pygame.event.pump()
 
     def move_left(self):
         """
         move paddle to left
         :return:
         """
-        self.move_pos[0] = self.move_pos[0] - PADDLE_SPEED
+        self.paddle_velocity.x -= PADDLE_SPEED
 
     def move_right(self):
         """
         move paddle to right
         :return:
         """
-        self.move_pos[0] = self.move_pos[0] + PADDLE_SPEED
+        self.paddle_velocity.x += PADDLE_SPEED
+
+    def stop_move(self):
+        """
+        stop moving paddle
+        :return:
+        """
+        self.paddle_velocity.x = 0
 
     @property
     def rect(self):

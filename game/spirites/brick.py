@@ -114,7 +114,7 @@ class Brick(pygame.sprite.Sprite):
         """
         if self.has_bonus:
             shuffle(BONUSES)
-            self._bonus = BONUSES[randint(0, 2)]
+            self._bonus = BONUSES[randint(0, len(LUCKY_BRICK)-1)]
         return self._bonus
 
     @property

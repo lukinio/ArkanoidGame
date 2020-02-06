@@ -110,8 +110,7 @@ class Game:
 
         def move_stop(event):
             if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
-                self._paddle.move_pos = [0, 0]
-                self._ball.move_pos = [0, 0]
+                self._paddle.stop_move()
 
         EVENT_MANAGER.subscribe(pygame.KEYUP, move_stop)
 

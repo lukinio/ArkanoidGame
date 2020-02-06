@@ -81,8 +81,8 @@ class Ball(pygame.sprite.Sprite):
         :return:
         """
         angle_rad = math.radians(angle)
-        return rect.move(self.ball_velocity.x * BALL_SPEED * math.cos(angle_rad),
-                         self.ball_velocity.y * BALL_SPEED * math.sin(angle_rad))
+        return rect.move(int(self.ball_velocity.x * BALL_SPEED * math.cos(angle_rad)),
+                         int(self.ball_velocity.y * BALL_SPEED * math.sin(angle_rad)))
 
     def update(self):
         """

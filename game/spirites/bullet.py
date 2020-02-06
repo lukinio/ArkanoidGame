@@ -18,7 +18,7 @@ class Bullet(pygame.sprite.Sprite):
         """
         super().__init__()
         self.image, self.rect = load_img(BULLET_IMG)
-        self. rect.x, self.rect.y = rect[0], rect[1]
+        self.rect.x, self.rect.y = rect[0], rect[1]
         self._area = pygame.display.get_surface().get_rect()
         self._bricks_sprites = pygame.sprite.Group()
         self.brick_collide = None
