@@ -1,7 +1,9 @@
 #### Setup
 
 - Clone the project out of GitHub and then run:
+```python
     pip install -r requirements.txt
+```
 
 #### Gameplay
 --------
